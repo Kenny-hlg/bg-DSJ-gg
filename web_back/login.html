@@ -30,7 +30,39 @@
         </div>
 
     </div> 
+    <script src="./js/jquery-1.12.4.min.js"></script>
 
+    <script>
+        $(function(){
+            $('.input_sub').click(function(e){
+                e.preventDefault();
+                var userName = $('.input_txt').val();
+                var password = $('.input_pass').val();
+
+                if( userName == '' || password == ''){
+                    alert('密码用户名字不能为空');
+                    return;
+                }
+
+                $.post({
+                    url:"http://localhost:8000/admin/login",
+                    data: {
+                        'user_name':userName,
+                        'password':password
+                    },
+                    success:function(res){
+                        if( res.code == 200){
+                            location.href = "./index.html";
+                        }else {
+                            alert(res.msg);
+                        }
+                    }
+                    
+                })
+            })
+        })
+    
+    </script>
 </body>
 
 </html>
