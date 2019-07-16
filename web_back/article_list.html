@@ -324,8 +324,21 @@
                     },
                     success: function (backData) {
                         console.log(backData);
-                        var resHtml = template('tpl2', backData);
-                        $('tbody').html(resHtml);
+                        if (backData.code == 200) {
+                            var resHtml = template('tpl2', backData);
+                            $('tbody').html(resHtml);
+
+                            var totalPages = backData.totalPage;
+                            if (myTotalPage != totalPages) {
+                                myTotalPage = totalPages;
+                                var currentPage = $pagination.twbsPagination('getCurrentPage');
+                                $pagination.twbsPagination('destroy');
+                                $pagination.twbsPagination($.extend({}, defaultOpts, {
+                                    startPage: 1,
+                                    totalPages: totalPages
+                                }));
+                            }
+                        }
                     }
                 })
             }
@@ -339,17 +352,21 @@
             // 进入页面就显示所有文章
             $('#btnSearch').trigger('click');
 
-            $('.pagination').twbsPagination({
-                totalPages: 20,
+            var myTotalPage = 10;
+
+            var $pagination = $('.pagination');
+            var defaultOpts = {
+                totalPages: myTotalPage,
                 visiblePages: 5,
-                first:'首页',
-                last:'尾页',
-                prev:"上一页",
-                next:"下一页",
+                first: '首页',
+                last: '尾页',
+                prev: "上一页",
+                next: "下一页",
                 onPageClick: function (event, page) {
-                  UpData(page);
+                    UpData(page);
                 }
-            });
+            };
+            $pagination.twbsPagination(defaultOpts);
         })
     </script>
 
